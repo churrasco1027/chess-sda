@@ -1,0 +1,138 @@
+class FriendsSystem {
+  constructor() {
+    this.friends = JSON.parse(localStorage.getItem("friends")) || [];
+    this.users = JSON.parse(localStorage.getItem("allUsers")) || {};
+    this.currentUser = JSON.parse(localStorage.getItem("user")) || {};
+    this.onlineUsers = JSON.parse(localStorage.getItem("onlineUsers")) || {};
+    this.initOnlineTracking();
+  }
+
+  initOnlineTracking() {
+    const user = JSON.parse(localStorage.getItem("user")) || {};
+    const userID = user.id || this.generateUserID();
+
+    if (!user.id) {
+      user.id = userID;
+      localStorage.setItem("user", JSON.stringify(user));
+    }
+
+    this.setUserOnline(userID);
+
+    setInterval(() => {
+      this.setUserOnline(userID);
+    }, 30000);
+
+    window.addEventListener("beforeunload", () => {
+      this.setUserOffline(userID);
+    });
+  }
+
+  setUserOnline(userID) {
+    const onlineUsers = JSON.parse(localStorage.getItem("onlineUsers")) || {};
+    onlineUsers[userID] = {
+      status: "online",
+      lastSeen: new Date().toISOString(),
+      connectedSince: onlineUsers[userID]?.connectedSince || new Date().toISOString()
+    };
+    localStorage.setItem("onlineUsers", JSON.stringify(onlineUsers));
+  }
+
+  setUserOffline(userID) {
+    const onlineUsers = JSON.parse(localStorage.getItem("onlineUsers")) || {};
+    onlineUsers[userID] = {
+      status: "offline",
+      lastSeen: new Date().toISOString(),
+      connectedSince: onlineUsers[userID]?.connectedSince || new Date().toISOString()
+    };
+    localStorage.setItem("onlineUsers", JSON.stringify(onlineUsers));
+  }
+
+  formatTimeAgo(timestamp) {
+    const now = new Date();
+    const past = new Date(timestamp);
+    const diffMs = now - past;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return "hace unos segundos";
+    if (diffMins < 60) return `hace ${diffMins} min`;
+    if (diffHours < 24) return `hace ${diffHours}h`;
+    if (diffDays < 7) return `hace ${diffDays}d`;
+    return "hace más de una semana";
+  }
+
+  getStatusText(userID) {
+    const status = this.getUserStatus(userID);
+    if (status.status === "online") return "🟢 Activo";
+    return `⚫ Conectado ${this.formatTimeAgo(status.lastSeen)}`;
+  }
+
+  getUserStatus(userID) {
+    const onlineUsers = JSON.parse(localStorage.getItem("onlineUsers")) || {};
+    return onlineUsers[userID] || {
+      status: "offline",
+      lastSeen: new Date().toISOString(),
+      connectedSince: new Date().toISOString()
+    };
+  }
+
+  generateUserID() {
+    return `CHESS_${Math.random().toString(36).substring(2, 11).toUpperCase()}`;
+  }
+
+  addFriend(friendID) {
+    if (friendID === this.getCurrentUserID()) {
+      return { success: false, message: "No puedes añadirte a ti mismo" };
+    }
+    if (this.friends.find(f => f.id === friendID)) {
+      return { success: false, message: "Ya es tu amigo" };
+    }
+
+    const friendData = this.getUserData(friendID);
+    if (!friendData) {
+      return { success: false, message: "Usuario no encontrado" };
+    }
+
+    this.friends.push({
+      id: friendID,
+      username: friendData.username,
+      country: friendData.country,
+      elo: friendData.elo || 100,
+      status: this.getUserStatus(friendID).status,
+      lastSeen: this.getUserStatus(friendID).lastSeen,
+      connectedSince: this.getUserStatus(friendID).connectedSince
+    });
+
+    localStorage.setItem("friends", JSON.stringify(this.friends));
+    return { success: true, message: "Amigo añadido", friend: friendData };
+  }
+
+  getUserData(userID) {
+    const users = JSON.parse(localStorage.getItem("allUsers")) || {};
+    return users[userID] || null;
+  }
+
+  saveUserData(userID, userData) {
+    const users = JSON.parse(localStorage.getItem("allUsers")) || {};
+    users[userID] = userData;
+    localStorage.setItem("allUsers", JSON.stringify(users));
+  }
+
+  getFriends() {
+    return this.friends.map(friend => ({
+      ...friend,
+      statusText: this.getStatusText(friend.id)
+    }));
+  }
+
+  challengeFriend(friendID) {
+    return {
+      success: true,
+      challengeID: `CHALLENGE_${Math.random().toString(36).substring(2, 11).toUpperCase()}`,
+      opponent: friendID,
+      createdAt: new Date().toISOString()
+    };
+  }
+}
+const friendsSystem = new FriendsSystem();
