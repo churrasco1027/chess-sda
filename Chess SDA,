@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chess SDA</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo-mark">♟</span>
+      <h1>Chess SDA</h1>
+    </div>
+
+    <div class="user-bar">
+      <div class="flag">🇵🇪</div>
+      <div class="user-name">Ajedrecista_1027</div>
+      <div class="fire">🔥 0 días</div>
+      <button class="btn ghost-btn">Mi perfil</button>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <aside class="sidebar">
+      <button class="nav-btn active" data-panel="lobby">🎮 Lobby</button>
+      <button class="nav-btn" data-panel="online">🌐 Jugar en línea</button>
+      <button class="nav-btn" data-panel="bot">🤖 Jugar vs bot</button>
+      <button class="nav-btn" data-panel="openings">📚 Aperturas</button>
+      <button class="nav-btn" data-panel="friends">👥 Amigos</button>
+    </aside>
+
+    <section class="content">
+      <div id="lobby" class="panel active">
+        <div class="stats-grid">
+          <div class="card stat-card">
+            <span class="label">ELO Bala</span>
+            <strong class="value">--</strong>
+          </div>
+          <div class="card stat-card">
+            <span class="label">ELO Blitz</span>
+            <strong class="value">--</strong>
+          </div>
+          <div class="card stat-card">
+            <span class="label">ELO Rápida</span>
+            <strong class="value">--</strong>
+          </div>
+        </div>
+
+        <div class="card chart-card">
+          <h3>Historial de ELO</h3>
+          <canvas id="eloChart" width="560" height="170"></canvas>
+        </div>
+
+        <div class="quick-play">
+          <div class="card">
+            <h3>1 min</h3>
+            <button class="btn primary-btn play-btn" data-mode="bullet">Jugar Bala</button>
+          </div>
+          <div class="card">
+            <h3>3 min</h3>
+            <button class="btn primary-btn play-btn" data-mode="blitz">Jugar Blitz</button>
+          </div>
+          <div class="card">
+            <h3>10 min</h3>
+            <button class="btn primary-btn play-btn" data-mode="rapid">Jugar Rápida</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="online" class="panel">
+        <div class="card">
+          <h2>Jugar en línea</h2>
+
+          <div class="online-grid">
+            <div class="mini-card">
+              <h3>Crear partida</h3>
+              <input id="timeInput" type="number" value="10" min="1" max="60" />
+              <button id="createGameBtn" class="btn primary-btn">Crear partida</button>
+              <div id="gameCodeBox" class="game-code-box hidden">
+                <p>Código de partida</p>
+                <code id="gameCode">--</code>
+                <button class="btn secondary-btn" id="copyCodeBtn">Copiar</button>
+              </div>
+            </div>
+
+            <div class="mini-card">
+              <h3>Unirse por ID</h3>
+              <input id="joinCodeInput" type="text" placeholder="Pega el código" />
+              <button id="joinGameBtn" class="btn primary-btn">Unirse</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="bot" class="panel">
+        <div class="card">
+          <h2>Jugar contra bot</h2>
+
+          <div class="bot-settings">
+            <label for="difficultyRange">Dificultad: <span id="difficultyValue">1200 ELO</span></label>
+            <input id="difficultyRange" type="range" min="300" max="3250" step="50" value="1200" />
+          </div>
+
+          <div class="color-options">
+            <label><input type="radio" name="color" value="white" checked /> Blancas</label>
+            <label><input type="radio" name="color" value="random" /> Aleatorio</label>
+            <label><input type="radio" name="color" value="black" /> Negras</label>
+          </div>
+
+          <button id="startBotGameBtn" class="btn primary-btn">Empezar partida</button>
+        </div>
+
+        <div class="card">
+          <h3>Top Mundial</h3>
+          <div id="topBots" class="top-bots"></div>
+        </div>
+      </div>
+
+      <div id="openings" class="panel">
+        <div class="card">
+          <h2>Enciclopedia de aperturas</h2>
+
+          <div class="opening-list">
+            <article class="opening-item">
+              <h3>Defensa Siciliana</h3>
+              <p>Juego agresivo, desarrollo rápido y contraataque en el centro.</p>
+              <button class="btn secondary-btn">Ver en tablero</button>
+            </article>
+
+            <article class="opening-item">
+              <h3>Apertura Italiana</h3>
+              <p>Desarrollo natural con presión directa sobre el centro.</p>
+              <button class="btn secondary-btn">Ver en tablero</button>
+            </article>
+
+            <article class="opening-item">
+              <h3>Ruy López</h3>
+              <p>Apertura sólida y posicional con control del centro.</p>
+              <button class="btn secondary-btn">Ver en tablero</button>
+            </article>
+
+            <article class="opening-item">
+              <h3>Gambito de Dama</h3>
+              <p>Muy estratégica, con tensión central y estructura dinámica.</p>
+              <button class="btn secondary-btn">Ver en tablero</button>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <div id="friends" class="panel">
+        <div class="card">
+          <h2>Amigos</h2>
+          <div class="friend-search">
+            <input type="text" placeholder="Buscar amigo" />
+            <button class="btn primary-btn">Agregar</button>
+          </div>
+
+          <div class="friend-list">
+            <div class="friend-item">
+              <span>Juan Pérez</span>
+              <button class="btn secondary-btn">Desafiar</button>
+            </div>
+            <div class="friend-item">
+              <span>María García</span>
+              <button class="btn secondary-btn">Desafiar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="board-panel">
+      <div id="chessboard" class="chessboard" aria-label="Tablero de ajedrez"></div>
+
+      <div class="clocks">
+        <div class="clock white">10:00</div>
+        <div class="clock black">10:00</div>
+      </div>
+    </aside>
+  </main>
+
+  <script src="js/board.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
