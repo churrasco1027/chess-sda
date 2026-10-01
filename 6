@@ -1,0 +1,102 @@
+const navButtons = document.querySelectorAll(".nav-btn");
+const panels = document.querySelectorAll(".panel");
+
+navButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    navButtons.forEach((btn) => btn.classList.remove("active"));
+    panels.forEach((panel) => panel.classList.remove("active"));
+    button.classList.add("active");
+    const targetId = button.dataset.panel;
+    const panel = document.getElementById(targetId);
+    if (panel) panel.classList.add("active");
+  });
+});
+
+const difficultyRange = document.getElementById("difficultyRange");
+const difficultyValue = document.getElementById("difficultyValue");
+
+if (difficultyRange && difficultyValue) {
+  difficultyRange.addEventListener("input", () => {
+    difficultyValue.textContent = `${difficultyRange.value} ELO`;
+  });
+}
+
+document.getElementById("createGameBtn")?.addEventListener("click", () => {
+  const randomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+  document.getElementById("gameCode").textContent = randomCode;
+  document.getElementById("gameCodeBox").classList.remove("hidden");
+});
+
+document.getElementById("copyCodeBtn")?.addEventListener("click", () => {
+  const code = document.getElementById("gameCode").textContent;
+  navigator.clipboard.writeText(code);
+});
+
+document.getElementById("startBotGameBtn")?.addEventListener("click", () => {
+  alert("Partida iniciada contra bot");
+});
+
+document.querySelectorAll(".play-btn").forEach((button) => {
+  button.addEventListener("click", () => {
+    alert(`Modo ${button.dataset.mode} seleccionado`);
+  });
+});
+
+document.getElementById("openProfileBtn")?.addEventListener("click", () => {
+  window.location.href = "profile.html";
+});
+
+document.getElementById("addFriendBtn")?.addEventListener("click", () => {
+  const input = document.getElementById("friendSearch");
+  const id = input.value.trim();
+
+  if (!id) return;
+
+  const result = friendsSystem.addFriend(id);
+  alert(result.message);
+
+  renderFriends();
+});
+
+function renderFriends() {
+  const list = document.getElementById("friendList");
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  const friends = friendsSystem.getFriends();
+
+  friends.forEach((friend) => {
+    const item = document.createElement("div");
+    item.className = "friend-item";
+
+    const info = document.createElement("div");
+    info.innerHTML = `
+      <strong>${friend.username}</strong><br>
+      <span class="friend-status ${friend.status === "online" ? "online" : "offline"}">
+        ${friend.status === "online" ? "🟢 Activo" : `⚫ Conectado ${friendsSystem.formatTimeAgo(friend.lastSeen)}`}
+      </span>
+    `;
+
+    const challenge = document.createElement("button");
+    challenge.className = "btn secondary-btn";
+    challenge.textContent = "Desafiar";
+    challenge.onclick = () => {
+      alert(`Desafiar a ${friend.username} (${friend.id})`);
+    };
+
+    const profile = document.createElement("button");
+    profile.className = "btn ghost-btn";
+    profile.textContent = "Ver perfil";
+    profile.onclick = () => {
+      window.location.href = `friend-profile.html?userId=${friend.id}`;
+    };
+
+    item.appendChild(info);
+    item.appendChild(challenge);
+    item.appendChild(profile);
+    list.appendChild(item);
+  });
+}
+
+renderFriends();
