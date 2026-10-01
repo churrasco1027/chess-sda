@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chess SDA - Autenticación</title>
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-left">
+      <div class="auth-branding">
+        <div class="branding-icon">♟</div>
+        <h1>Chess SDA</h1>
+        <p>Plataforma de Ajedrez en Línea</p>
+      </div>
+
+      <div class="auth-features">
+        <div class="feature-item"><span class="feature-icon">🤖</span><p>Juega contra bots IA</p></div>
+        <div class="feature-item"><span class="feature-icon">🌐</span><p>Multijugador en línea</p></div>
+        <div class="feature-item"><span class="feature-icon">📊</span><p>Estadísticas detalladas</p></div>
+        <div class="feature-item"><span class="feature-icon">📚</span><p>Enciclopedia de aperturas</p></div>
+      </div>
+    </div>
+
+    <div class="auth-right">
+      <div class="auth-forms">
+        <div id="loginForm" class="auth-form active">
+          <h2>Inicia Sesión</h2>
+          <p class="auth-subtitle">Bienvenido a Chess SDA</p>
+
+          <div class="form-group">
+            <label>Correo</label>
+            <input type="email" id="loginEmail" placeholder="tu@correo.com" required />
+          </div>
+
+          <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" required />
+          </div>
+
+          <div class="remember-forgot">
+            <label><input type="checkbox" id="rememberMe" /> Recuérdame</label>
+            <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <button class="btn btn-primary" id="loginBtn">Iniciar Sesión</button>
+
+          <div class="divider"><span>O continúa con</span></div>
+
+          <div class="social-login">
+            <button class="btn btn-social btn-google">🔵 Google</button>
+            <button class="btn btn-social btn-github">⬛ GitHub</button>
+          </div>
+
+          <p class="auth-toggle">
+            ¿No tienes cuenta?
+            <button id="switchToRegister" class="toggle-btn">Regístrate</button>
+          </p>
+        </div>
+
+        <div id="registerForm" class="auth-form">
+          <h2>Crear Cuenta</h2>
+          <p class="auth-subtitle">Únete a Chess SDA</p>
+
+          <div class="form-group">
+            <label>Nombre de Usuario</label>
+            <input type="text" id="registerUsername" placeholder="Ajedrecista_XXXX" required />
+          </div>
+
+          <div class="form-group">
+            <label>Correo</label>
+            <input type="email" id="registerEmail" placeholder="tu@correo.com" required />
+          </div>
+
+          <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" id="registerPassword" placeholder="••••••••" required />
+          </div>
+
+          <div class="form-group">
+            <label>Confirmar Contraseña</label>
+            <input type="password" id="registerPasswordConfirm" placeholder="••••••••" required />
+          </div>
+
+          <div class="form-group">
+            <label>País</label>
+            <select id="registerCountry" required>
+              <option>Selecciona tu país</option>
+              <option value="pe">🇵🇪 Perú</option>
+              <option value="mx">🇲🇽 México</option>
+              <option value="ar">🇦🇷 Argentina</option>
+              <option value="co">🇨🇴 Colombia</option>
+              <option value="es">🇪🇸 España</option>
+            </select>
+          </div>
+
+          <label class="checkbox">
+            <input type="checkbox" id="registerTerms" required />
+            Acepto términos y condiciones
+          </label>
+
+          <button class="btn btn-primary" id="registerBtn">Crear Cuenta</button>
+
+          <div class="divider"><span>O regístrate con</span></div>
+
+          <div class="social-login">
+            <button class="btn btn-social btn-google">🔵 Google</button>
+            <button class="btn btn-social btn-github">⬛ GitHub</button>
+          </div>
+
+          <p class="auth-toggle">
+            ¿Ya tienes cuenta?
+            <button id="switchToLogin" class="toggle-btn">Inicia sesión</button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>
